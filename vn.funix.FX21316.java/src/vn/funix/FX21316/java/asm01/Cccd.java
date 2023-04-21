@@ -121,9 +121,13 @@ public class Cccd {
                 System.out.println("giới tính: Nữ | 20" + cccd.substring(4, 6));
                 break;
             default:
-                System.out.println("Năm sinh không hợp lý rồi!");
+                System.out.println("Năm sinh không hợp lý rồi! có thể cụ đã mất hoặc đứa trẻ chưa được sinh!");
                 break;
         };
+    }
+
+    public void soNgauNhien() {
+        System.out.println("Số ngẫu nhiên: " + cccd.substring(6));
     }
 
 

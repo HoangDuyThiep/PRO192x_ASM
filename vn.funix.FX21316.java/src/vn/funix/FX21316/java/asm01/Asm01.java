@@ -47,7 +47,6 @@ public class Asm01 {
 
                 //khi mã xác thực chính xác
                 if (xacThuc == newRd) {
-                    System.out.println("+----------+---------------------------+----------+");
                     System.out.println("+----------+----Mã xác thực chính xác -+----------+");
                     System.out.println("|  0. Thoát                                       |");
                     System.out.println("+----------+---------------------------+----------+");
@@ -76,7 +75,6 @@ public class Asm01 {
                         if (cccd1.checkcccd() && cccd1.checkMaTinh() && cccd1.checkGioiTinh()) {
                             int luaChon = -1;
                             while (luaChon != 0) {
-                                System.out.println("+----------+---------------------------+----------+");
                                 System.out.println("+----------+----Số căn cước hợp lệ-----+----------+");
                                 System.out.println("| 1. Kiểm tra nơi sinh");
                                 System.out.println("| 2. Kiểm tra tuôi, giới tính");
@@ -101,11 +99,15 @@ public class Asm01 {
                                         break;
                                     case 2:
                                         // kiểm tra giới tính, tuổi
-
+                                        System.out.println("+----------+---------------------------+----------+");
+                                        cccd1.GTinhNSinh();
+                                        System.out.println("+----------+---------------------------+----------+");
                                         break;
                                     case 3:
                                         //kiểm tra số ngẫu nhiên
-
+                                        System.out.println("+----------+---------------------------+----------+");
+                                        cccd1.soNgauNhien();
+                                        System.out.println("+----------+---------------------------+----------+");
                                         break;
 
                                     default:
