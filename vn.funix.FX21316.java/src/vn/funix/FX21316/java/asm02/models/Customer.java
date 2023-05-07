@@ -6,15 +6,15 @@ import java.util.Locale;
 
 public class Customer extends User {
     private ArrayList<Account> accounts;
-
+// constructor ----------------------------
     public Customer(String name, String customerId) {
         super(name, customerId);
         this.accounts = new ArrayList<Account>();
     }
 
-
-    public void addAccount(int newAccount, double newBalance, String type) {
-        Account account = new Account(newAccount, newBalance, type);
+//---------------------------------------------
+    public void addAccount(int newAccount, double newBalance) {
+        Account account = new Account(newAccount, newBalance);
         accounts.add(account);
     }
 
@@ -33,7 +33,7 @@ public class Customer extends User {
     }
     private String getType() {
         for (int i = 0; i < accounts.size(); i++) {
-            if (accounts.get(i).getType().equalsIgnoreCase("premium")) {
+            if (accounts.get(i).isPremiumAccount().equalsIgnoreCase("Premium")) {
                 return "Premium";
             }
         }

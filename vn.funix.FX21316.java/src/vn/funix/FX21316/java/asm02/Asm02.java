@@ -34,16 +34,20 @@ public class Asm02 {
     static int ktChucNang(int choice) {
         Scanner sc = new Scanner(System.in);
         try {
-            choice = sc.nextInt();
+            choice = Integer.parseInt(sc.nextLine());
         } catch (Exception e) {
             System.out.println("Phím chức năng là số từ 0 đến 5, vui lòng nhập lại phím chức năng");
             ktChucNang(choice);
         }
-        sc.nextLine();
+        if (choice < 0 || choice > 5) {
+            System.out.println("Phím chức năng là số từ 0 đến 5, vui lòng nhập lại phím chức năng");
+            ktChucNang(choice);
+            return choice;
+        }
         return choice;
     }
     //chức năng 1 ------------thêm khách hàng-------------
-    private static void addCustomer(Scanner scanner) {
+    private static void setCustomerId(Scanner scanner) {
         System.out.println("Chức năng thêm khách hàng");
         System.out.println("+----------+---------------------------+----------+");
         System.out.print("Nhập tên khách hàng: ");
@@ -78,35 +82,27 @@ public class Asm02 {
         if (customer != null){
             System.out.print("Nhập mã tài khoản gồm 6 chữ số: ");
             int accNumber;
-            //kiểm tra số tài khoản -----------------------
+            //kiểm tra số tài khoản ------------------------------------
             do {
+                // try catch khi nhập số tài khoản ---------------------
                 try {
                     accNumber = Integer.parseInt(scanner.nextLine());
                 } catch (Exception e) {
                     accNumber = 1;
                 }
-
                 if (!customer.checkAccNum(accNumber)) {
                     System.out.println("Số tài khoản đã trùng hoặc không phải 6 số");
                 }
             } while (!customer.checkAccNum(accNumber));
-
-
-
                 int balance;
-                String type = null;
                 //vòng lặp do kiểm tra số dư ban đầu hợp lệ--------------------
                 do {
                     System.out.print("Nhâp số dư tài khoản ban đầu, yêu cầu lớn hơn 50 000 đồng: ");
                     balance = Integer.parseInt(scanner.nextLine());
-                    if (balance > 10000000) {
-                        type = "Premium";
-                    } else {
-                        type = "Normal";
-                    }
+
                 } while (balance < 50000);
 
-                customer.addAccount(accNumber, balance, type);
+                customer.addAccount(accNumber, balance);
             }
             System.out.println("+----------+---------------------------+----------+");
             System.out.println("Hoàn thành chức năng");
@@ -127,7 +123,7 @@ public class Asm02 {
     }
 
     //chức năng 5 ----------- tìm tên theo căn cước công dân -------------
-    private static void searchCustomerById(Scanner scanner) {
+    private static void searchCustomerByCCCD(Scanner scanner) {
         System.out.print("Nhập căn cước công dân: ");
         String idNumber = scanner.nextLine();
         Customer customer = bank.searchById(idNumber);
@@ -147,7 +143,7 @@ public class Asm02 {
 
             switch (choice) {
                 case 1:
-                    addCustomer(sc);
+                    setCustomerId(sc);
                     break;
                 case 2:
                     addAccount(sc);
@@ -159,7 +155,7 @@ public class Asm02 {
                     searchCustomerByName(sc);
                     break;
                 case 5:
-                    searchCustomerById(sc);
+                    searchCustomerByCCCD(sc);
                     break;
                 case 0:
                     System.out.println("Thoát chương trình, cảm ơn đã sử dụng!");
