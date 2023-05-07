@@ -16,7 +16,19 @@ public class Customer extends User {
         accounts.add(account);
     }
 
-
+    public boolean checkAccNum(int accNumber) {
+        if (accounts.size() < 1) {
+            if (accNumber >= 100000 && accNumber < 1000000) {
+                return true;
+            }
+        }
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accNumber != accounts.get(i).getAccountNumer() && accNumber >= 100000 && accNumber < 1000000) {
+                return true;
+            }
+        }
+        return false;
+    }
     private String getType() {
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).getType().equalsIgnoreCase("premium")) {
