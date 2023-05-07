@@ -1,14 +1,15 @@
 package vn.funix.FX21316.java.asm02.models;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Bank {
-//    public String Id;
-    public ArrayList<Customer> customers;
+    private String id;
+    private ArrayList<Customer> customers;
 
     public Bank() {
         this.customers = new ArrayList<Customer>();
-//        Id = id;
+        this.id = String.valueOf(UUID.randomUUID());
     }
 
     public void addCuctomer(Customer newCuctomer) {

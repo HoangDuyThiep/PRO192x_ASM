@@ -1,6 +1,8 @@
 package vn.funix.FX21316.java.asm02.models;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Customer extends User {
     private ArrayList<Account> accounts;
@@ -47,9 +49,19 @@ public class Customer extends User {
     }
 
     public void displayInformation() {
-        System.out.println(getCustomerId() + "   |        " + getName() + "            "+ getType() +"         |     " + getBalance());
+        int counter = 1;
+        //định dạng tiền việt -------------------------------
+        double number = getBalance();
+        Locale locale = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        String currency = currencyFormatter.format(number);
+
+        System.out.println(getCustomerId() + "   |        " + getName() + "   |      "+ getType() +"         |     " + currency);
         for (int i = 0; i < accounts.size(); i++) {
-            System.out.println(accounts.get(i).getAccountNumer() + "   |                             |     " +accounts.get(i).getBalance());
+            double numberOfAcc = accounts.get(i).getBalance();
+            String currencyOfAcc = currencyFormatter.format(numberOfAcc);
+            System.out.println(counter + ". "+ accounts.get(i).getAccountNumer() + "     |                                      |     " +currencyOfAcc);
+            counter++;
         }
     }
 
