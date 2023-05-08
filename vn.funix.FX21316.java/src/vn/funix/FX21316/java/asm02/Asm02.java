@@ -36,13 +36,10 @@ public class Asm02 {
         try {
             choice = Integer.parseInt(sc.nextLine());
         } catch (Exception e) {
-            System.out.println("Phím chức năng là số từ 0 đến 5, vui lòng nhập lại phím chức năng");
-            ktChucNang(choice);
         }
+
         if (choice < 0 || choice > 5) {
             System.out.println("Phím chức năng là số từ 0 đến 5, vui lòng nhập lại phím chức năng");
-            ktChucNang(choice);
-            return choice;
         }
         return choice;
     }
