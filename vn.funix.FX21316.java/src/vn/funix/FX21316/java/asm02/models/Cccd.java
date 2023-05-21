@@ -104,6 +104,15 @@ public class Cccd {
             return true;
         } else return false;
     }
+    public boolean checkSoNgayNhien() {
+        String tacGioiTinh = cccd.substring(6);
+        try {
+            int so = Integer.parseInt(tacGioiTinh);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     //hàm xuất thông tin từ cccd ------------------------------
     public String tinh() {

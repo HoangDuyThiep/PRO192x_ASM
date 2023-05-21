@@ -15,6 +15,21 @@ public class Bank {
     public void addCuctomer(Customer newCuctomer) {
             customers.add(newCuctomer);
     }
+    public boolean isCustomerExisted(Customer newCustomer) {
+        for (Customer customer : customers) {
+            if (customer.getCustomerId().equals(newCustomer.getCustomerId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean validateCustomerId(String canCuocCongDan) {
+        Cccd cccd = new Cccd(canCuocCongDan);
+        if (cccd.checkcccd() && cccd.checkMaTinh() && cccd.checkGioiTinh() && cccd.checkSoNgayNhien()) {
+            return true;
+        }
+        return false;
+    }
     //hàm tìm theo ten khác hàng
     public Customer searchByName(String keyword) {
         for (int i = 0; i < customers.size(); i++) {

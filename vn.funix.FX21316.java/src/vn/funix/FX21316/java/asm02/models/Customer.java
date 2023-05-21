@@ -33,7 +33,7 @@ public class Customer extends User {
         }
         return false;
     }
-    private String getType() {
+    public String getType() {
         for (int i = 0; i < accounts.size(); i++) {
             if (accounts.get(i).isPremiumAccount().equalsIgnoreCase("Premium")) {
                 return "Premium";
@@ -42,7 +42,7 @@ public class Customer extends User {
         return "Normal";
     }
 
-    private int getBalance() {
+    public int getBalance() {
         int balance = 0;
         for (int i = 0; i < accounts.size(); i++) {
             balance += accounts.get(i).getBalance();

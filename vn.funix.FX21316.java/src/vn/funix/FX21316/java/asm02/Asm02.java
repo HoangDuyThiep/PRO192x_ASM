@@ -44,18 +44,18 @@ public class Asm02 {
         }
         return choice;
     }
-    //chức năng 1 ------------thêm khách hàng-------------
+    //chức năng 1 ------------thêm khách hàng
     private static void setCustomerId(Scanner scanner) {
         System.out.println("Chức năng thêm khách hàng");
         System.out.println("+----------+---------------------------+----------+");
         System.out.print("Nhập tên khách hàng: ");
         String name = scanner.nextLine();
         System.out.print("Nhập số ăn cước công dân: ");
-        //kiểm tra cccd theo form nên không cần sử dụng try catch ---------------
+        //kiểm tra cccd theo form nên không cần sử dụng try catch
         while (true) {
             String id = scanner.nextLine();
             Cccd cccd = new Cccd(id);
-            if (cccd.checkcccd() && cccd.checkMaTinh() && cccd.checkGioiTinh()) {
+            if (cccd.checkcccd() && cccd.checkMaTinh() && cccd.checkGioiTinh() && cccd.checkSoNgayNhien()) {
                 Customer customer = new Customer(name, id);
                 bank.addCuctomer(customer);
                 break;

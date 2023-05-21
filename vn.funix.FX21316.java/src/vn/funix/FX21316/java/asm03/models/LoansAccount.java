@@ -32,7 +32,7 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
     public String getTypeOfAcc() {
         return "LOAN";
     }
-    private double getTransactionFee() {
+    public double getTransactionFee() {
         return (getType().equals("Premium")) ? LOAN_ACCOUNT_WITHDRAW_PREMIUM_FEE : LOAN_ACCOUNT_WITHDRAW_FEE;
     }
 
