@@ -19,19 +19,22 @@ public class Customer extends User {
     public void addAccount(Account account) {
         accounts.add(account);
     }
-
+//check số acc khi tạo mới
     public boolean checkAccNum(int accNumber) {
         if (accounts.size() < 1) {
             if (accNumber >= 100000 && accNumber < 1000000) {
                 return true;
+            } else return false;
+        } else if (accNumber < 100000 || accNumber >= 1000000) {
+            return false;
+        } else  {
+            for (int i = 0; i < accounts.size(); i++) {
+                if ((accNumber == accounts.get(i).getAccountNumer())) {
+                    return false;
+                }
             }
         }
-        for (int i = 0; i < accounts.size(); i++) {
-            if (accNumber != accounts.get(i).getAccountNumer() && accNumber >= 100000 && accNumber < 1000000) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
     public String getType() {
         for (int i = 0; i < accounts.size(); i++) {
@@ -41,7 +44,7 @@ public class Customer extends User {
         }
         return "Normal";
     }
-
+//nhận tổng số tiền của khách hàng
     public int getBalance() {
         int balance = 0;
         for (int i = 0; i < accounts.size(); i++) {
@@ -72,7 +75,7 @@ public class Customer extends User {
         for (int i = 0; i < accounts.size(); i++) {
             double numberOfAcc = accounts.get(i).getBalance();
             String currencyOfAcc = currencyFormatter.format(numberOfAcc);
-            System.out.printf(counter + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc);
+            System.out.printf(String.valueOf(counter) + "   " + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc);
             counter++;
         }
     }
