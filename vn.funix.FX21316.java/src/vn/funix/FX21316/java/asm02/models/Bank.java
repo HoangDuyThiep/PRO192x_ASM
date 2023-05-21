@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Bank {
     private String id;
-    private ArrayList<Customer> customers;
+    protected ArrayList<Customer> customers;
 
     public Bank() {
         this.customers = new ArrayList<Customer>();

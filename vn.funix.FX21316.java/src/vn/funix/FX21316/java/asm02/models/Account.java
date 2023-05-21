@@ -1,6 +1,6 @@
 package vn.funix.FX21316.java.asm02.models;
 
-public class Account {
+public abstract class Account {
     private int accountNumer;
     private double balance;
     private String type;
@@ -14,6 +14,15 @@ public class Account {
     public Account(int accountNumer, double balance) {
         this.accountNumer = accountNumer;
         this.balance = balance;
+        if (balance >= 10000000) {
+            this.type = "Premium";
+        } else {
+            this.type = "Normal";
+        }
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public int getAccountNumer() {
@@ -21,7 +30,7 @@ public class Account {
     }
 
     public String isPremiumAccount() {
-        if (balance > 10000000) {
+        if (balance >= 10000000) {
             return "Premium";
         }
         return "Normal";
@@ -35,6 +44,8 @@ public class Account {
     public String getType() {
         return type;
     }
+
+    public abstract String getTypeOfAcc();
 
 
 

@@ -1,5 +1,6 @@
 package vn.funix.FX21316.java.asm02;
 
+import vn.funix.FX21316.java.asm02.models.Account;
 import vn.funix.FX21316.java.asm02.models.Bank;
 import vn.funix.FX21316.java.asm02.models.Cccd;
 import vn.funix.FX21316.java.asm02.models.Customer;
@@ -99,7 +100,13 @@ public class Asm02 {
 
                 } while (balance < 50000);
 
-                customer.addAccount(accNumber, balance);
+                Account account = new Account(accNumber, balance) {
+                    @Override
+                    public String getTypeOfAcc() {
+                        return null;
+                    }
+                };
+                customer.addAccount(account);
             }
             System.out.println("+----------+---------------------------+----------+");
             System.out.println("Hoàn thành chức năng");
