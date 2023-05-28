@@ -10,6 +10,7 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
     private static final double LOAN_ACCOUNT_WITHDRAW_PREMIUM_FEE = 0.01;
     private static final double LOAN_ACCOUNT_MAX_BALANCE = 100000000;
     private ArrayList<Transaction> transactions;
+    private  double vatPhi;
 
     //contractor
     public LoansAccount(int accountNumer, double balance, String type) {
@@ -45,14 +46,19 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
         System.out.printf("SO TK: %31s%n", getAccountNumer());
         System.out.printf("SO TIEN: %29s%n", Utils.formatBalance(amount));
         System.out.printf("SO DU: %31s%n", Utils.formatBalance(getBalance()));
-        System.out.printf("PHI + VAT: %27s%n", Utils.formatBalance(getTransactionFee() * amount));
+        System.out.printf("PHI + VAT: %27s%n", Utils.formatBalance(vatPhi));
         System.out.println(Utils.getDivider());
+        System.out.println(getType());
     }
 
     @Override
     public boolean withdraw(double amount) {
         if (isAccepted(amount)) {
             setBalance(getBalance() - amount - (amount * getTransactionFee()));
+            this.vatPhi = amount * getTransactionFee();
+            if (getBalance() < 10000000) {
+                setType("Normal");
+            }
             Transaction transaction = new Transaction(String.valueOf(getAccountNumer()), -amount - (amount * getTransactionFee()));
             transactions.add(transaction);
             return true;

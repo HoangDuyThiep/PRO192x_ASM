@@ -25,6 +25,10 @@ public abstract class Account {
         this.balance = balance;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public int getAccountNumer() {
         return accountNumer;
     }

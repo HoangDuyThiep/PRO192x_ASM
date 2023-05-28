@@ -3,6 +3,7 @@ package vn.funix.FX21316.java.asm03;
 import vn.funix.FX21316.java.asm02.models.Account;
 import vn.funix.FX21316.java.asm02.models.Customer;
 import vn.funix.FX21316.java.asm03.models.DigitalBank;
+import vn.funix.FX21316.java.asm03.models.DigitalCustomer;
 import vn.funix.FX21316.java.asm03.models.LoansAccount;
 import vn.funix.FX21316.java.asm03.models.SavingsAccount;
 
@@ -137,7 +138,7 @@ public class Asm03 {
 
     //chức năng 4: rút tiền
     private static void withdraw(Scanner scanner) {
-        Customer customer = activeBank.searchById(CUSTOMER_ID);
+        DigitalCustomer customer = (DigitalCustomer) activeBank.searchById(CUSTOMER_ID);
         if (customer != null){
             System.out.print("Nhập mã tài khoản bạn muốn rút tiền: ");
             int accNumber;
@@ -164,20 +165,8 @@ public class Asm03 {
                     amount = 0;
                 }
                 //kiểm tra loại acc để thực thiện rút tiền
-                if (account instanceof SavingsAccount) {
-                    if (((SavingsAccount) account).isAccepted(amount)) {
-                        ((SavingsAccount) account).withdraw(amount);
-                        ((SavingsAccount) account).log(amount);
-                        break;
-                    }
-                }
-                if (account instanceof LoansAccount) {
-                    if (((LoansAccount) account).isAccepted(amount)) {
-                        ((LoansAccount) account).withdraw(amount);
-                        ((LoansAccount) account).log(amount);
-                        break;
-                    }
-                }
+                customer.withdraw(accNumber,amount);
+                break;
             }
 
         }
