@@ -59,7 +59,7 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
             if (getBalance() < 10000000) {
                 setType("Normal");
             }
-            Transaction transaction = new Transaction(String.valueOf(getAccountNumer()), -amount - (amount * getTransactionFee()));
+            Transaction transaction = new Transaction(String.valueOf(getAccountNumer()), -amount - this.vatPhi);
             transactions.add(transaction);
             return true;
         }
