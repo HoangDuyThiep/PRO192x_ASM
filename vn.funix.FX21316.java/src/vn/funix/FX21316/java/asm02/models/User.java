@@ -1,12 +1,15 @@
 package vn.funix.FX21316.java.asm02.models;
 
 public class User {
-    protected String name;
-    protected String customerId;
+    private String name;
+    private String customerId;
 
     public User(String name, String customerId) {
         this.name = name;
         this.customerId = customerId;
+    }
+
+    public User() {
     }
 
     public String getName() {
@@ -23,5 +26,13 @@ public class User {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", customerId='" + customerId + '\'' +
+                '}';
     }
 }

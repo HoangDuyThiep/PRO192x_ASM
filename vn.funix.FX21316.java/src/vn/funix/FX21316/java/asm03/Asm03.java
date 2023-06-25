@@ -91,7 +91,7 @@ public class Asm03 {
 
             } while (balance < 50000);
 
-            Account account = new SavingsAccount(accNumber, balance);
+            Account account = new SavingsAccount(String.valueOf(accNumber), balance, customer.getType());
             customer.addAccount(account);
         }
         System.out.println("+----------+---------------------------+----------+");
@@ -129,7 +129,7 @@ public class Asm03 {
                 }
 
             } while (balance < 50000);
-            Account account = new LoansAccount(accNumber, balance);
+            Account account = new LoansAccount(String.valueOf(accNumber), balance);
             customer.addAccount(account);
         }
         System.out.println("+----------+---------------------------+----------+");

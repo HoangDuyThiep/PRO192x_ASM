@@ -13,11 +13,11 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
     private  double vatPhi;
 
     //contractor
-    public LoansAccount(int accountNumer, double balance, String type) {
+    public LoansAccount(String accountNumer, double balance, String type) {
         super(accountNumer, balance, type);
     }
 
-    public LoansAccount(int accountNumer, double balance) {
+    public LoansAccount(String accountNumer, double balance) {
         super(accountNumer, balance);
         transactions = new ArrayList<Transaction>();
         Transaction transaction = new Transaction(String.valueOf(accountNumer), balance);

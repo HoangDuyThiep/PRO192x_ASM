@@ -100,7 +100,7 @@ public class Asm02 {
 
                 } while (balance < 50000);
 
-                Account account = new Account(accNumber, balance) {
+                Account account = new Account(String.valueOf(accNumber), balance) {
                     @Override
                     public String getTypeOfAcc() {
                         return null;
