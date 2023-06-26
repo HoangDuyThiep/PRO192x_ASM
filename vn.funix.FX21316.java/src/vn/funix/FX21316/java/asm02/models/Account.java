@@ -10,27 +10,27 @@ import java.util.List;
 public abstract class Account implements Serializable {
     // định danh phiên bản của lớp để đảm bảo tính nhất quán
     // trong quá trình tuần tự hóa và giải tuần tự hóa.
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1L;
     private String accountNumer;
     private double balance;
     private String type;
     private String customerId;
 
 // constructor
-    public Account(String accountNumer, double balance, String type) {
-        this.accountNumer = accountNumer;
-        this.balance = balance;
-        this.type = type;
-    }
-    public Account(String accountNumer, double balance) {
-        this.accountNumer = accountNumer;
-        this.balance = balance;
-        if (balance >= 10000000) {
-            this.type = "Premium";
-        } else {
-            this.type = "Normal";
-        }
-    }
+//    public Account(String accountNumer, double balance, String type) {
+//        this.accountNumer = accountNumer;
+//        this.balance = balance;
+//        this.type = type;
+//    }
+//    public Account(String accountNumer, double balance) {
+//        this.accountNumer = accountNumer;
+//        this.balance = balance;
+//        if (balance >= 10000000) {
+//            this.type = "Premium";
+//        } else {
+//            this.type = "Normal";
+//        }
+//    }
 
     public Account(String accountNumer, String customerId, double balance) {
         this.accountNumer = accountNumer;
@@ -100,22 +100,9 @@ public abstract class Account implements Serializable {
         Transaction transaction = new Transaction(accountNumer, amount, time, status, type);
 
         // Thực hiện cập nhật số dư tài khoản
-        updateAccountBalance(transaction.getAmount(), transaction.getType());
+//        setBalance(getBalance() + amount);
     }
 
-    private void updateAccountBalance( double amount, TransactionType type) {
-        switch (type) {
-            case DEPOSIT:
-                setBalance(getBalance() + amount);
-                break;
-            case WITHDRAW:
-                setBalance(getBalance() + amount);
-                break;
-            case TRANSFERS:
-                setBalance(getBalance() + amount);
-                break;
-        }
-    }
 
 //    // thêm tài khoản mới vào danh sách
 //    public void  input(Scanner scanner) {

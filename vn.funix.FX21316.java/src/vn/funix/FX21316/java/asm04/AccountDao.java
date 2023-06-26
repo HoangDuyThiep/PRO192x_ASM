@@ -20,7 +20,7 @@ public class AccountDao {
     public static void update(Account editAccount) {
         List<Account> accounts = list();
         boolean hasExist = accounts.stream()
-                .anyMatch(account -> account.getAccountNumer() == (editAccount.getAccountNumer()));
+                .anyMatch(account -> account.getAccountNumer().equals(editAccount.getAccountNumer()));
 
         List<Account> updateAccounts;
         if (!hasExist) {
@@ -31,7 +31,8 @@ public class AccountDao {
 
             for (Account account : accounts) {
 
-                if (account.getAccountNumer() == (editAccount.getAccountNumer())) {
+                if (account.getAccountNumer().equals(editAccount.getAccountNumer())
+                && account.getCustomerId().equals(editAccount.getCustomerId())) {
                     updateAccounts.add(editAccount);
                 } else {
                     updateAccounts.add(account);

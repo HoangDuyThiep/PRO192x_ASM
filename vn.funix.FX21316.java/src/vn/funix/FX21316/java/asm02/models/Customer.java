@@ -2,6 +2,7 @@ package vn.funix.FX21316.java.asm02.models;
 
 import vn.funix.FX21316.java.asm03.models.LoansAccount;
 import vn.funix.FX21316.java.asm03.models.SavingsAccount;
+import vn.funix.FX21316.java.asm03.models.Withdraw;
 import vn.funix.FX21316.java.asm04.AccountDao;
 
 import java.io.Serializable;
@@ -32,29 +33,11 @@ public class Customer extends User implements Serializable {
     }
 
 // các hàm chức năng
-    public void addAccount(Account account) {
-        List<Account> accounts = getAccounts();
-        accounts.add(account);
-    }
-////check số acc khi tạo mới
-//    public boolean checkAccNum(String accNumber) {
+//    public void addAccount(Account account) {
 //        List<Account> accounts = getAccounts();
-//        int number = Integer.parseInt(accNumber);
-//        if (accounts.size() < 1) {
-//            if (number >= 100000 && number < 1000000) {
-//                return true;
-//            } else return false;
-//        } else if (number < 100000 || number >= 1000000) {
-//            return false;
-//        } else  {
-//            for (int i = 0; i < accounts.size(); i++) {
-//                if ((accNumber == accounts.get(i).getAccountNumer())) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
+//        accounts.add(account);
 //    }
+
 // getter & setter
     //  lấy ra danh sách các tài khoản (accounts) có customerId bằng customerId hiện tại
     public List<Account> getAccounts() {
@@ -101,6 +84,7 @@ public class Customer extends User implements Serializable {
         }
         return null;
     }
+    //rut tien
     public void withdraw(Scanner scanner) {
         List<Account> accounts = getAccounts();
         if (!accounts.isEmpty()) {
@@ -117,16 +101,22 @@ public class Customer extends User implements Serializable {
                 amount = Double.parseDouble(scanner.nextLine());
             } while (amount <= 0);
 
-            if (account instanceof  SavingsAccount) {
-                ((SavingsAccount) account).withdraw(amount);
+            if (account instanceof Withdraw) {
+                ((Withdraw) account).withdraw(amount);
+                // cap nhap tai khoan
+
+//                ((SavingsAccount) account).withdraw(amount);
             }
-            else if (account instanceof LoansAccount) {
-                ((LoansAccount) account).withdraw(amount);
-            }
+            Account updataAccount = new SavingsAccount(account.getAccountNumer(), getCustomerId(), account.getBalance());
+            AccountDao.update(updataAccount);
+//            else if (account instanceof LoansAccount) {
+//                ((LoansAccount) account).withdraw(amount);
+//            }
         } else {
             System.out.println("Khách hàng không có tài khoản nào, thao tác không thành công");
         }
     }
+    //chuyen tien
     public void transfers(Scanner scanner) {
         List<Account> accounts = getAccounts();
         // Nhập tài khoản gửi
@@ -179,13 +169,13 @@ public class Customer extends User implements Serializable {
                 System.out.println("Số tài khoản đã trùng hoặc không phải 6 số");
             }
         } while (!checkAccNum(accNumber));
-        int balance;
+        double balance;
         //vòng lặp do kiểm tra số dư ban đầu hợp lệ
         do {
             System.out.print("Nhâp số dư tài khoản ban đầu, yêu cầu lớn hơn 50 000 đồng: ");
             //catch nhập kí tự khong hợp lệ
             try {
-                balance = Integer.parseInt(scanner.nextLine());
+                balance = Double.parseDouble(scanner.nextLine());
             } catch (Exception e) {
                 System.out.println("Không hợp lệ:");
                 balance = 0;
@@ -193,14 +183,15 @@ public class Customer extends User implements Serializable {
 
         } while (balance < 50000);
         String accoutNumer = String.valueOf(accNumber);
-        Account account = new SavingsAccount(accoutNumer, balance, getCustomerId());
-        addAccount(account);
+        Account account = new SavingsAccount(accoutNumer, getCustomerId(), balance);
+//        addAccount(account);
         AccountDao.update(account);
         System.out.println("Tài khoản đã được thêm thành công!");
     }
     //kiem tra số tài khoản và số tiền ban đầu
     public boolean checkAccNum(int accNumber) {
-        List<Account> accounts = getAccounts();
+        // check toan bo accNum trong ngan hang
+        List<Account> accounts = AccountDao.list();
         if (accounts.size() < 1) {
             if (accNumber >= 100000 && accNumber < 1000000) {
                 return true;
@@ -208,8 +199,8 @@ public class Customer extends User implements Serializable {
         } else if (accNumber < 100000 || accNumber >= 1000000) {
             return false;
         } else  {
-            for (int i = 0; i < accounts.size(); i++) {
-                if ((accNumber == Integer.parseInt(accounts.get(i).getAccountNumer()))) {
+            for (Account account : accounts) {
+                if ((accNumber == Integer.parseInt(account.getAccountNumer()))) {
                     return false;
                 }
             }
@@ -276,7 +267,6 @@ public class Customer extends User implements Serializable {
         return "Customer{" +
                 "name='" + getName() + '\'' +
                 ", customerId='" + getCustomerId() + '\'' +
-                // ... các thuộc tính khác của lớp Customer
                 '}';
     }
 

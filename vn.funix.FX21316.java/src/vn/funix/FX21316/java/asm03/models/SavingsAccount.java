@@ -13,9 +13,9 @@ public class SavingsAccount extends Account implements Withdraw, ReportService, 
     private ArrayList<Transaction> transactions;
 
 //contractor
-    public SavingsAccount(String accountNumer, double balance, String type) {
-        super(accountNumer, balance, type);
-    }
+//    public SavingsAccount(String accountNumer, double balance, String type) {
+//        super(accountNumer, balance, type);
+//    }
 
     public SavingsAccount(String accountNumer, String customerId, double balance) {
         super(accountNumer, customerId, balance);
@@ -48,25 +48,15 @@ public class SavingsAccount extends Account implements Withdraw, ReportService, 
         return transactions;
     }
 
-    @Override
-    public void log(double amount) {
-        System.out.println(Utils.getDivider());
-        System.out.printf("%30s%n", getTitle());
-        System.out.printf("Ngày G/D: %28s%n", Utils.getDateTime());
-        System.out.printf("ATM ID: %30s%n", "DIGITAL-BANK-ATM 2023");
-        System.out.printf("SO TK: %31s%n", getAccountNumer());
-        System.out.printf("SO TIEN: %29s%n", Utils.formatBalance(amount));
-        System.out.printf("SO DU: %31s%n", Utils.formatBalance(getBalance()));
-        System.out.printf("PHI + VAT: %27s%n", Utils.formatBalance(getTransactionFee() * amount));
-        System.out.println(Utils.getDivider());
-    }
+
 
     @Override
     public boolean withdraw(double amount) {
         if (isAccepted(amount)) {
             setBalance(getBalance() - amount);
             String getCurrentTime = new Date().toString();
-            createTransaction(-amount, getCurrentTime, true, TransactionType.WITHDRAW);
+            createTransaction(amount, getCurrentTime, true, TransactionType.WITHDRAW);
+            log(amount,TransactionType.WITHDRAW, null);
 //            transactions.add(transaction);
             return true;
         }
@@ -119,15 +109,29 @@ public class SavingsAccount extends Account implements Withdraw, ReportService, 
                  transaction.displayTransaction();
              }
     }
-
+// log
+@Override
+public void log(double amount) {
+    System.out.println(Utils.getDivider());
+    System.out.printf("%30s%n", getTitle());
+    System.out.printf("Ngày G/D: %28s%n", Utils.getDateTime());
+    System.out.printf("ATM ID: %30s%n", "DIGITAL-BANK-ATM 2023");
+    System.out.printf("SO TK: %31s%n", getAccountNumer());
+    System.out.printf("SO TIEN: %29s%n", Utils.formatBalance(amount));
+    System.out.printf("SO DU: %31s%n", Utils.formatBalance(getBalance()));
+    System.out.printf("PHI + VAT: %27s%n", Utils.formatBalance(getTransactionFee() * amount));
+    System.out.println(Utils.getDivider());
+}
     @Override
     public void log(double amount, TransactionType type, String receiveAccount) {
         System.out.println(Utils.getDivider());
         System.out.printf("%30s%n", getTitle());
         System.out.printf("Ngày G/D: %28s%n", Utils.getDateTime());
         System.out.printf("ATM ID: %30s%n", "DIGITAL-BANK-ATM 2023");
-        System.out.printf("SO TK: %31s%n", getAccountNumer());
-        System.out.printf("SO TIEN: %29s%n", Utils.formatBalance(amount));
+        if (receiveAccount == null) {
+            System.out.printf("SO TK: %31s%n", getAccountNumer());
+            System.out.printf("SO TIEN RUT: %29s%n", Utils.formatBalance(amount));
+        }
         System.out.printf("SO DU: %31s%n", Utils.formatBalance(getBalance()));
         System.out.printf("PHI + VAT: %27s%n", Utils.formatBalance(getTransactionFee() * amount));
         System.out.println(Utils.getDivider());

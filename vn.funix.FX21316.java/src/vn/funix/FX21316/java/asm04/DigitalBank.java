@@ -29,12 +29,6 @@ public class DigitalBank extends Bank{
         List<List<String>> fileDatas = TextFileService.readFile(fileName);
         List<Customer> customers = CustomerDao.list();
 
-//        System.out.println("object co trong file: ");
-//        if (customers.size() > 0) {
-//            for (Customer customer : customers) {
-//                System.out.println(customer);
-//        } }
-
         for (List data : fileDatas) {
             Customer customer = new  Customer(data);
             if (customer != null) {
@@ -51,8 +45,6 @@ public class DigitalBank extends Bank{
             }
         }
 
-//        System.out.println("object duoc luu");
-//        for (Customer customer : customers) System.out.println(customer);
 
         try {
             CustomerDao.save(customers);
@@ -80,8 +72,9 @@ public class DigitalBank extends Bank{
         if (isCustomerExisted(customers, customerId)) {
             Customer customer = getCustomerById(customers, customerId);
             if (customer != null) {
-                customer.displayInformation();
                 customer.withdraw(scanner);
+                customer.displayInformation();
+
             }
         } else {
             System.out.println("Khách hàng không tồn tại!");
@@ -102,8 +95,8 @@ public class DigitalBank extends Bank{
         if (isCustomerExisted(customers, customerId)) {
             Customer customer = getCustomerById(customers, customerId);
             if (customer != null) {
-                customer.displayInformation();
                 customer.transfers(scanner);
+                customer.displayInformation();
             }
         } else {
             System.out.println("Khách hàng không tồn tại!");

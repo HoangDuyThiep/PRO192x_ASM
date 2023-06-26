@@ -11,7 +11,7 @@ import java.util.Random;
 public class Transaction implements Serializable {
     // định danh phiên bản của lớp để đảm bảo tính nhất quán
     // trong quá trình tuần tự hóa và giải tuần tự hóa.
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String accountNumber;

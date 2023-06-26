@@ -33,7 +33,7 @@ public class BinaryFileService {
             for (T object : objects) {
                 file.writeObject(object);
             }
-            System.out.println("Ghi file thành công");
+//            System.out.println("Ghi file thành công");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

@@ -40,8 +40,8 @@ public class Asm04 {
             choice = -1;
         }
 
-        if (choice < 0 || choice > 5) {
-            System.out.println("Phím chức năng là số từ 0 đến 5, vui lòng nhập lại phím chức năng");
+        if (choice < 0 || choice > 6) {
+            System.out.println("Phím chức năng là số từ 0 đến 6, vui lòng nhập lại phím chức năng");
         }
         return choice;
     }
@@ -51,7 +51,22 @@ public class Asm04 {
         String path = scanner.nextLine();
         activeBank.addCustomers(path);
     }
-
+    // chuc nang 1: xem danh sach khach hang
+    static void showCustomers() {
+        activeBank.showCustomers();
+    }
+    // chuc nang 3: them tai khoan saving
+    static void addAccountSaving(Scanner scanner) {
+        System.out.println("nhap ma so khach hang: ");
+        String customerId = scanner.nextLine();
+        activeBank.addSavingAccount(scanner, customerId);
+    }
+    //chuc nang 5: rut tien
+    static void withdraw(Scanner scanner) {
+        System.out.println("nhap ma so khach hang: ");
+        String customerId = scanner.nextLine();
+        activeBank.withdraw(scanner, customerId);
+    }
 
     // main
     public static void main(String[] args) {
@@ -66,25 +81,28 @@ public class Asm04 {
 
             switch (choice) {
                 case 1:
-//                    showCustomer();
+                    showCustomers();
                     break;
                 case 2:
                     addCustomers(scanner);
                     break;
                 case 3:
-//                    addAccountLoan(scanner);
+                    addAccountSaving(scanner);
                     break;
                 case 4:
-//                    withdraw(scanner);
+//                    transfer(scanner);
                     break;
                 case 5:
+                    withdraw(scanner);
+                    break;
+                case 6:
 //                    displayTransactions();
                     break;
                 case 0:
                     System.out.println("Thoát chương trình, cảm ơn đã sử dụng!");
                     break;
                 default:
-                    if (choice > 5 && choice < -1) {
+                    if (choice > 6 && choice < -1) {
                         System.out.println("Phím chức năng là số từ 0 đến 6, vui lòng nhập lại phím chức năng");
                     }
                     break;
