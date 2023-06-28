@@ -103,6 +103,7 @@ public class DigitalBank extends Bank{
         if (isCustomerExisted(customers, customerId)) {
             Customer customer = getCustomerById(customers, customerId);
             if (customer != null) {
+                customer.displayInformation();
                 customer.transfers(scanner);
                 customer.displayTransactionInformation();
             }

@@ -98,11 +98,11 @@ public class Customer extends User implements Serializable {
                 System.out.println("Nhập số tài khoàn: ");
                 account = getAccountByAccountNumber(accounts, scanner.nextLine());
             } while (account == null);
-
+            // nhap va kiem tra so tien
             do {
                 System.out.println("Nhập số tiền rút: ");
                 amount = Double.parseDouble(scanner.nextLine());
-            } while (amount <= 0);
+            } while (!checkAmount(account, amount));
 
             if (account instanceof Withdraw) {
                 ((Withdraw) account).withdraw(amount);
@@ -145,10 +145,12 @@ public class Customer extends User implements Serializable {
         }
         //nhan exit de thoat
         if (!receiverAccNum.equalsIgnoreCase("exit")) {
-            // Nhập số tiền cần chuyển
-            System.out.println("Nhập số tiền chuyển: ");
-            double amount = Double.parseDouble(scanner.nextLine());
-
+            // Nhập số tiền cần chuyển & kiem tra so tien chuyen
+            double amount;
+            do {
+                System.out.println("Nhập số tiền chuyển: ");
+                amount = Double.parseDouble(scanner.nextLine());
+            } while (!checkAmount(senderAccount, amount));
             // Xác nhận việc chuyển tiền
             System.out.println("Xác nhận chuyển tiền? (Y/N)");
             String confirmation = scanner.nextLine();
@@ -185,7 +187,7 @@ public class Customer extends User implements Serializable {
                 accNumber = 0;
             }
             if (!checkAccNum(accNumber)) {
-                System.out.println("Số tài khoản đã trùng hoặc không phải 6 số");
+                System.out.print("Số tài khoản đã trùng hoặc không phải 6 số: ");
             }
         } while (!checkAccNum(accNumber));
         double balance;
@@ -224,6 +226,27 @@ public class Customer extends User implements Serializable {
             if (isAccountExits(accounts, String.valueOf(accNumber))) {
                 return false;
             }
+        }
+        return true;
+    }
+    //kiem tra so tien rut
+    private boolean checkAmount(Account account, double amount) {
+        double maxWithdrawal = (account.getType().equals("Premium")) ? Double.MAX_VALUE : 5000000;
+
+        if (amount < 50000 || amount > maxWithdrawal) {
+            System.out.println("Số tiền rút khong hợp lệ.");
+            return false;
+        }
+
+        if (amount % 10000 != 0) {
+            System.out.println("Số tiền phải là bội số của 10,000.");
+            return false;
+        }
+
+        if ((amount + 50000) > account.getBalance()) {
+            System.out.println("số dư tài khoản không đủ hoặc sau khi rút ít hơn 50.000đ.");
+            System.out.println("Bạn chỉ có thể rút dưới : " + Utils.formatBalance(account.getBalance() - 50000));
+            return false;
         }
         return true;
     }

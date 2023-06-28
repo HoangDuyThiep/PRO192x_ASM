@@ -3,7 +3,7 @@ package vn.funix.FX21316.java.asm03.test;
 import org.junit.jupiter.api.Test;
 import vn.funix.FX21316.java.asm02.models.Account;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AccountTest {
 

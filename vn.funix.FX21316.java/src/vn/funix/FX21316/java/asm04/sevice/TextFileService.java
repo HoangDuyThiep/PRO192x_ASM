@@ -22,7 +22,7 @@ public class TextFileService {
                 customers.add(customerAttributes);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Loi doc file hoac duong dan file khong dung");
         }
 
         return customers;
