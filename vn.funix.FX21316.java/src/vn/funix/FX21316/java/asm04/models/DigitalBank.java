@@ -1,7 +1,10 @@
-package vn.funix.FX21316.java.asm04;
+package vn.funix.FX21316.java.asm04.models;
 
 import vn.funix.FX21316.java.asm02.models.Cccd;
 import vn.funix.FX21316.java.asm02.models.Customer;
+import vn.funix.FX21316.java.asm04.dao.CustomerDao;
+import vn.funix.FX21316.java.asm04.exception.CustomerIdNotValidException;
+import vn.funix.FX21316.java.asm04.sevice.TextFileService;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,15 +35,20 @@ public class DigitalBank extends Bank{
         for (List data : fileDatas) {
             Customer customer = new  Customer(data);
             if (customer != null) {
-                if (checkIdCustomer(customer.getCustomerId())) {
-                    if (!isCustomerExisted(customers, customer.getCustomerId())) {
-                        customers.add(customer);
-                        System.out.println("Thêm khách hàng thành công: " + customer.getName());
-                    } else {
-                        System.out.println("Số ID đã tồn tại cho khách hàng: " + customer.getName());
+                try {
+                    if (checkIdCustomer(customer.getCustomerId())) {
+                        if (!isCustomerExisted(customers, customer.getCustomerId())) {
+                            customers.add(customer);
+                            System.out.println("Thêm khách hàng thành công: " + customer.getName());
+                        } else {
+                            System.out.println("Số ID đã tồn tại cho khách hàng: " + customer.getName());
+                        }
                     }
-                } else {
-                    System.out.println("Số ID không hợp lệ cho khách hàng: " + customer.getName());
+//                    else {
+//                        System.out.println("Số ID không hợp lệ cho khách hàng: " + customer.getName());
+//                    }
+                } catch (CustomerIdNotValidException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -59,7 +67,7 @@ public class DigitalBank extends Bank{
             Customer customer = getCustomerById(customers, customerId);
             if (customer != null) {
                 customer.input(scanner);
-
+                customer.displayInformation();
             }
         } else {
             System.out.println("Khách hàng không tồn tại!");
@@ -80,7 +88,7 @@ public class DigitalBank extends Bank{
             System.out.println("Khách hàng không tồn tại!");
         }
     }
-    // ấy ra một customer có id bằng id cho trước
+    // lấy ra một customer có id bằng id cho trước
     private Customer getCustomerById(List<Customer> customers, String customerId) {
         for (Customer customer : customers) {
             if (customer.getCustomerId().equals(customerId)) {
@@ -96,20 +104,31 @@ public class DigitalBank extends Bank{
             Customer customer = getCustomerById(customers, customerId);
             if (customer != null) {
                 customer.transfers(scanner);
-                customer.displayInformation();
+                customer.displayTransactionInformation();
             }
         } else {
             System.out.println("Khách hàng không tồn tại!");
         }
     }
     // kiểm customerID khi tạo mới
-    private boolean checkIdCustomer(String customerId) {
+    private boolean checkIdCustomer(String customerId) throws CustomerIdNotValidException {
         // Logic để kiểm tra tính hợp lệ của số ID khách hàng
         Cccd cccd = new Cccd(customerId);
         if (cccd.checkcccd() && cccd.checkMaTinh() && cccd.checkGioiTinh() && cccd.checkSoNgayNhien()) {
             return true;
         }
-        return false;
+        throw new CustomerIdNotValidException("Số ID không hợp lệ!");
+    }
+    public void showAccOfCustomer(Scanner scanner, String customerId) {
+        List<Customer> customers = CustomerDao.list();
+        if (isCustomerExisted(customers, customerId)) {
+            Customer customer = getCustomerById(customers, customerId);
+            if (customer != null) {
+                customer.displayTransactionInformation();
+            }
+        } else {
+            System.out.println("Khách hàng không tồn tại!");
+        }
     }
 
     private boolean isCustomerExisted(List<Customer> customers, String customerId) {

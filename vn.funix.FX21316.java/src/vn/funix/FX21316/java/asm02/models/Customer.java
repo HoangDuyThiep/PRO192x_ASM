@@ -2,8 +2,11 @@ package vn.funix.FX21316.java.asm02.models;
 
 import vn.funix.FX21316.java.asm03.models.LoansAccount;
 import vn.funix.FX21316.java.asm03.models.SavingsAccount;
+import vn.funix.FX21316.java.asm03.models.Utils;
 import vn.funix.FX21316.java.asm03.models.Withdraw;
-import vn.funix.FX21316.java.asm04.AccountDao;
+import vn.funix.FX21316.java.asm04.dao.AccountDao;
+import vn.funix.FX21316.java.asm04.models.Color;
+import vn.funix.FX21316.java.asm04.models.ITransfer;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
@@ -127,30 +130,46 @@ public class Customer extends User implements Serializable {
         } while (senderAccount == null);
 
         // Nhập tài khoản nhận
-        Account receiverAccount;
-        do {
-            System.out.println("Nhập số tài khoản nhận: ");
-            receiverAccount = getAccountByAccountNumber(accounts, scanner.nextLine());
-        } while (receiverAccount == null);
-
-        // Nhập số tiền cần chuyển
-        System.out.println("Nhập số tiền chuyển: ");
-        double amount = Double.parseDouble(scanner.nextLine());
-
-        // Xác nhận việc chuyển tiền
-        System.out.println("Xác nhận chuyển tiền? (Y/N)");
-        String confirmation = scanner.nextLine();
-        if (confirmation.equalsIgnoreCase("Y")) {
-            // Thực hiện chuyển tiền
-            if (senderAccount instanceof  SavingsAccount) {
-                ((SavingsAccount) senderAccount).transfers(receiverAccount, amount);
+        Account receiverAccount = null;
+        String receiverAccNum;
+        while (true){
+            System.out.println("Nhập số tài khoản nhận (exit de thoat): ");
+            receiverAccNum = scanner.nextLine();
+            if (receiverAccNum.toLowerCase().equals("exit")) {
+                break;
             }
+            receiverAccount = getAccountByAccountNumber(accounts, receiverAccNum);
+            if (receiverAccount != null) {
+                break;
+            }
+        }
+        //nhan exit de thoat
+        if (!receiverAccNum.toLowerCase().equals("exit")) {
+            // Nhập số tiền cần chuyển
+            System.out.println("Nhập số tiền chuyển: ");
+            double amount = Double.parseDouble(scanner.nextLine());
+
+            // Xác nhận việc chuyển tiền
+            System.out.println("Xác nhận chuyển tiền? (Y/N)");
+            String confirmation = scanner.nextLine();
+            if (confirmation.equalsIgnoreCase("Y")) {
+                // Thực hiện chuyển tiền
+                if (senderAccount instanceof ITransfer) {
+                    ((ITransfer) senderAccount).transfer(receiverAccount, amount);
+                }
 //            else if (senderAccount instanceof LoansAccount) {
 //                ((LoansAccount) senderAccount).transfers(amount);
 //            }
-            System.out.println("Chuyển tiền thành công.");
-        } else {
-            System.out.println("Chuyển tiền đã bị hủy bỏ.");
+                // updata tai khoan gui
+                Account updataSenderAccount = new SavingsAccount(senderAccount.getAccountNumer(), getCustomerId(), senderAccount.getBalance());
+                AccountDao.update(updataSenderAccount);
+                // updata tai khoan nhan
+                Account updataReceiverAccount = new SavingsAccount(receiverAccount.getAccountNumer(), getCustomerId(), receiverAccount.getBalance());
+                AccountDao.update(updataReceiverAccount);
+                System.out.println("Chuyển tiền thành công.");
+            } else {
+                System.out.println("Chuyển tiền đã bị hủy bỏ.");
+            }
         }
     }
     // thêm tài khoản mới vào danh sách
@@ -184,9 +203,11 @@ public class Customer extends User implements Serializable {
         } while (balance < 50000);
         String accoutNumer = String.valueOf(accNumber);
         Account account = new SavingsAccount(accoutNumer, getCustomerId(), balance);
+        account.createTransaction(balance, Utils.getDateTime(), true, TransactionType.DEPOSIT);
 //        addAccount(account);
         AccountDao.update(account);
         System.out.println("Tài khoản đã được thêm thành công!");
+//        displayTransactionInformation();
     }
     //kiem tra số tài khoản và số tiền ban đầu
     public boolean checkAccNum(int accNumber) {
@@ -217,11 +238,11 @@ public class Customer extends User implements Serializable {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         String currency = currencyFormatter.format(number);
 
-        System.out.println(getCustomerId() + "   |        " + getName() + "  |      "+ getType() +"         |     " + currency);
+        System.out.println(Color.yellowColor + getCustomerId() + "   |        " + getName() + "  |      "+ getType() +"         |     " + currency + Color.resetColor);
         for (int i = 0; i < accounts.size(); i++) {
             double numberOfAcc = accounts.get(i).getBalance();
             String currencyOfAcc = currencyFormatter.format(numberOfAcc);
-            System.out.printf(String.valueOf(counter) + "   " + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc);
+            System.out.printf(Color.greenColor + String.valueOf(counter) + "   " + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc + Color.resetColor);
             counter++;
         }
     }
@@ -246,11 +267,11 @@ public class Customer extends User implements Serializable {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         String currency = currencyFormatter.format(number);
 
-        System.out.println(getCustomerId() + "   |        " + getName() + "  |      "+ getType() +"         |     " + currency);
+        System.out.println(Color.yellowColor + getCustomerId() + "   |        " + getName() + "  |      "+ getType() +"         |     " + currency + Color.resetColor);
         for (int i = 0; i < accounts.size(); i++) {
             double numberOfAcc = accounts.get(i).getBalance();
             String currencyOfAcc = currencyFormatter.format(numberOfAcc);
-            System.out.printf(String.valueOf(counter) + "   " + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc);
+            System.out.printf(Color.greenColor + String.valueOf(counter) + "   " + accounts.get(i).getAccountNumer() + " %25s %39s%n", accounts.get(i).getTypeOfAcc() + "  |", currencyOfAcc + Color.resetColor);
             counter++;
         }
         for (Account account: accounts) {

@@ -1,10 +1,10 @@
 package vn.funix.FX21316.java.asm02.models;
 
 import vn.funix.FX21316.java.asm03.models.Transaction;
-import vn.funix.FX21316.java.asm04.TransactionDao;
+import vn.funix.FX21316.java.asm04.dao.TransactionDao;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account implements Serializable {
@@ -76,7 +76,7 @@ public abstract class Account implements Serializable {
     }
     // lấy ra các giao dịch thuộc account hiện tại từ file
     public List<Transaction> getTransactions() {
-        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> transactions = TransactionDao.list();
 
         List<Transaction> readFile = TransactionDao.list();
         for (Transaction transaction : readFile)
@@ -84,8 +84,6 @@ public abstract class Account implements Serializable {
                 if (transaction.getAccountNumber().equals(accountNumer)) {
                     transactions.add(transaction);
                 }
-
-
         return transactions;
     }
     //hiện thị danh sách ra màn hình
@@ -96,8 +94,15 @@ public abstract class Account implements Serializable {
     }
     // tạo ra thêm một giao dịch cho account và cập nhật số dư tài khoản
     public void createTransaction(double amount, String time, boolean status, TransactionType type) {
+        List<Transaction> transactions = TransactionDao.list();
         // Tạo giao dịch mới
-        Transaction transaction = new Transaction(accountNumer, amount, time, status, type);
+        Transaction transaction = new Transaction(getAccountNumer(), amount, time, status, type);
+        transactions.add(transaction);
+        try {
+            TransactionDao.save(transactions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Thực hiện cập nhật số dư tài khoản
 //        setBalance(getBalance() + amount);

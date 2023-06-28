@@ -1,11 +1,9 @@
 package vn.funix.FX21316.java.asm04.test;
 
 import vn.funix.FX21316.java.asm02.models.Customer;
-import vn.funix.FX21316.java.asm04.CustomerDao;
+import vn.funix.FX21316.java.asm04.dao.CustomerDao;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DigitalBankTest {
 

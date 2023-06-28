@@ -1,6 +1,7 @@
 package vn.funix.FX21316.java.asm03.models;
 
 import vn.funix.FX21316.java.asm02.models.Account;
+import vn.funix.FX21316.java.asm02.models.TransactionType;
 
 import java.util.ArrayList;
 
@@ -63,8 +64,7 @@ public class LoansAccount extends Account implements ReportService, Withdraw{
             if (getBalance() < 10000000) {
                 setType("Normal");
             }
-            Transaction transaction = new Transaction(String.valueOf(getAccountNumer()), -amount - this.vatPhi);
-            transactions.add(transaction);
+            createTransaction(amount,Utils.getDateTime(), true, TransactionType.WITHDRAW);
             return true;
         }
         return false;
