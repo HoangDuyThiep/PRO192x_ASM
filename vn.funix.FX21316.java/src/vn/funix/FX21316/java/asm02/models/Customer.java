@@ -138,6 +138,10 @@ public class Customer extends User implements Serializable {
             if (receiverAccNum.equalsIgnoreCase("exit")) {
                 break;
             }
+            if(receiverAccNum.equals(senderAccount.getAccountNumer())) {
+                System.out.println("Số tài khoản nhận đã trùng số tài khoản nhận!");
+                receiverAccNum = "";
+            }
             receiverAccount = getAccountByAccountNumber(accounts, receiverAccNum);
             if (receiverAccount != null) {
                 break;
@@ -149,7 +153,11 @@ public class Customer extends User implements Serializable {
             double amount;
             do {
                 System.out.println("Nhập số tiền chuyển: ");
-                amount = Double.parseDouble(scanner.nextLine());
+                try {
+                    amount = Double.parseDouble(scanner.nextLine());
+                } catch (Exception e) {
+                    amount = 0;
+                }
             } while (!checkAmount(senderAccount, amount));
             // Xác nhận việc chuyển tiền
             System.out.println("Xác nhận chuyển tiền? (Y/N)");

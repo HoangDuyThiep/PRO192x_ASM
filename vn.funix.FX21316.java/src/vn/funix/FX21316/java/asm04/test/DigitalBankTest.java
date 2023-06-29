@@ -1,87 +1,90 @@
 package vn.funix.FX21316.java.asm04.test;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import vn.funix.FX21316.java.asm02.models.Account;
+import vn.funix.FX21316.java.asm02.models.Customer;
+import vn.funix.FX21316.java.asm03.models.SavingsAccount;
+import vn.funix.FX21316.java.asm04.dao.AccountDao;
+import vn.funix.FX21316.java.asm04.dao.CustomerDao;
+import vn.funix.FX21316.java.asm04.dao.TransactionDao;
+import vn.funix.FX21316.java.asm04.models.DigitalBank;
+import vn.funix.FX21316.java.asm04.models.ITransfer;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import static org.mockito.Mockito.when;
-
-public class CustomerDaoTest {
+import static org.mockito.Mockito.*;
+@PrepareForTest(Customer.class) // Mô phỏng lớp Customer
+public class DigitalBankTest {
 
     @Mock
-    private Scanner mockScanner;
+    private CustomerDao customerDao;
+    @Mock
+    private AccountDao accountDao;
+    @Mock
+    private TransactionDao transactionDao;
+    @Mock
+    private Customer customer = new Customer("Thiep", "123");
 
-    @BeforeEach
+    @Mock
+    private SavingsAccount senderAccount = new SavingsAccount("123", "123", 100000);
+
+    @Mock
+    private SavingsAccount receiverAccount = new SavingsAccount("456", "123", 100000);;
+
+
+    private DigitalBank digitalBank;
+
+    @Before
     public void setup() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
+        digitalBank = new DigitalBank("123", "Thiep");
     }
 
     @Test
-    public void testTransfers_CustomerExisted_TransferSuccessful() {
-        // Tạo dữ liệu giả cho kiểm thử
+    public void testTransfers() throws IOException {
         String customerId = "123";
 
-        // Tạo danh sách khách hàng giả
+        // Thiết lập hành vi của CustomerDao
         List<Customer> customers = new ArrayList<>();
-        Customer customer = new Customer("123", "John Doe");
         customers.add(customer);
+        when(customerDao.list()).thenReturn(customers);
 
-        // Thiết lập hành vi cho Scanner giả
-        String accountNumber = "123456";
-        String receiverAccountNumber = "789012";
-        String transferAmount = "100";
-        String confirmation = "Y";
-        String userInput = accountNumber + "\n" + receiverAccountNumber + "\n" + transferAmount + "\n" + confirmation;
-        InputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
-        when(mockScanner.nextLine()).thenReturn(accountNumber, receiverAccountNumber, transferAmount, confirmation);
-        System.setIn(inputStream);
+        // Thiết lập hành vi của Scanner
+//        when(scanner.nextLine())
+//                .thenReturn("senderAccountNumber")
+//                .thenReturn("receiverAccountNumber")
+//                .thenReturn("100000")
+//                .thenReturn("Y");
 
-        // Gọi phương thức transfers
-        CustomerDao.transfers(mockScanner, customerId);
+        // Thiết lập hành vi của AccountDao
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(senderAccount);
+        accounts.add(receiverAccount);
+        when(customer.getAccounts()).thenReturn(accounts);
 
-        // Kiểm tra kết quả
-        // Assert rằng khách hàng đã được hiển thị thông tin
-        Assertions.assertTrue(customer.isInformationDisplayed());
+        // Thiết lập hành vi của ITransfer
+        when(senderAccount instanceof ITransfer).thenReturn(true);
 
-        // Assert rằng giao dịch chuyển tiền đã được thực hiện thành công
-        Assertions.assertTrue(customer.isTransactionSuccessful());
+        // Gọi phương thức đang được kiểm tra
 
-        // Assert rằng thông tin giao dịch đã được hiển thị
-        Assertions.assertTrue(customer.isTransactionInformationDisplayed());
-    }
-
-    @Test
-    public void testTransfers_CustomerNotExisted_DisplayErrorMessage() {
-        // Tạo dữ liệu giả cho kiểm thử
-        String customerId = "456";
-
-        // Tạo danh sách khách hàng giả
-        List<Customer> customers = new ArrayList<>();
-        Customer customer = new Customer("123", "John Doe");
-        customers.add(customer);
-
-        // Gọi phương thức transfers
-        CustomerDao.transfers(mockScanner, customerId);
-
-        // Kiểm tra kết quả
-        // Assert rằng thông báo lỗi được hiển thị khi khách hàng không tồn tại
-        Assertions.assertEquals("Khách hàng không tồn tại!", systemOut());
-    }
-
-    // Hàm hỗ trợ để chụp thông điệp xuất ra từ System.out.println()
-    private String systemOut() {
-        return outputStreamCaptor.toString().trim();
+        // Kiểm tra hành vi đã được gọi
+        verify(customer).displayInformation();
+        verify(customer).displayTransactionInformation();
+        verify(senderAccount).transfer(receiverAccount, 100.0);
+        verify(senderAccount).setBalance(anyDouble());
+        verify(receiverAccount).setBalance(anyDouble());
+        // Kiểm tra hành vi không được gọi
+        verify(System.out, never()).println("Khách hàng không tồn tại!");
+        verify(System.out, never()).println("Chuyển tiền đã bị hủy bỏ.");
+        verify(System.out, never()).println("Không thể thực hiện giao dịch chuyển tiền.");
+        // Kiểm tra hành vi không được gọi trên các mock khác
+        verifyNoMoreInteractions(customerDao, customer, senderAccount, receiverAccount);
     }
 }
+

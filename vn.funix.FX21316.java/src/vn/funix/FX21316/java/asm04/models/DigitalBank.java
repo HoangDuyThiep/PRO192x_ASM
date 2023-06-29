@@ -136,12 +136,6 @@ public class DigitalBank extends Bank{
     private boolean isCustomerExisted(List<Customer> customers, String customerId) {
         return customers.stream()
                 .anyMatch(customer -> customer.getCustomerId().equals(customerId));
-//        for (Customer customer : customers) {
-//            if (customer.getCustomerId().equals(customerId)) {
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
 
